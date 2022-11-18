@@ -1,0 +1,107 @@
+---
+    - name: Install latest version of Apache
+      apt:
+        name: apache2
+        update_cache: yes
+        state: latest
+
+    - name: install git
+      apt:
+        name: git
+        state: present
+      become: yes
+
+
+    - name: Checkout Github sample
+      ansible.builtin.git:
+        repo: https://github.com/f1amy/laravel-realworld-example-app.git
+        dest: /var/www/laravel
+        force: yes
+        clone: yes
+        accept_hostkey: yes
+
+    - name: Give rigth permission to Path
+      shell: chmod 755 /var/www/
+      become: yes  
+
+         
+    - name: Give permission to laravel app
+      file:
+        path: "/var/www/{{ http_conf }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0777'
+    
+    - name: Change Permissions
+      shell: sudo chown -R $USER:www-data /var/www/{{ http_conf }}
+
+    - name: set permissions for Laravel storage folder
+      file:
+        path: /var/www/{{ http_conf }}/storage
+        state: directory
+        recurse: yes
+        mode: '0777'
+      become: yes
+
+
+      
+    - name: Remove default apache vhost config from sites-enable
+      file: name=/etc/apache2/sites-enabled/000-default.conf state=absent
+
+    - name: Create apache2 vhost for domain
+      template: 
+        src: "files/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}.conf"
+        owner: www-data 
+        group: www-data
+        mode: 0644
+               
+    - name: Update a2ensite
+      shell: a2ensite {{ http_conf }}
+
+    - name: Enable apache2 rewrite module
+      shell: a2enmod rewrite
+
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_conf }}
+      
+
+    - name: Disable default Apache site
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+      
+ 
+    - name: "UFW firewall allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
+ 
+  
+    - name: set time zone to Africa/Lagos
+      timezone:
+        name: Africa/Lagos
+    
+
+    - name: Set up .env file
+      template:
+        src: "files/laravel-env.j2"
+        dest: "/var/www/{{ http_conf }}/.env" 
+
+     
+    - name: setup laravel
+      shell: |
+        cd /var/www/{{ http_conf }}
+        php artisan key:generate
+      become: yes 
+       
+
+    - name: Run artisan migrate
+      shell: php /var/www/{{ http_conf }}/artisan migrate --force
+      become: yes
+      notify: restart apache2
+         
+    - name: Run Migrations + Seeders
+      shell: "/usr/bin/php /var/www/{{ http_conf }}/artisan migrate --seed"
+      notify: restart apache2

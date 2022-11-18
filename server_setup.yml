@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - { role: Setup, tags: ['setup'] }
+
+    - { role: php, tags: ['php', 'web', 'php-fpm', 'lamp'] }
+   
+    - { role: Mysql, tags: ['mysql', 'mariadb', 'db', 'lamp'] }
+   
+    - { role: Composer, tags: ['composer'] } 
+   
+    - { role: Apache2, tags: ['apache2', 'web', 'http', 'lamp'] } 
+    
+    
+       

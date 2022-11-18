@@ -1,0 +1,26 @@
+---
+# Initial Server Setup
+ remote_user: uchenna
+
+# MySQL Setup
+ mysql_root_password: root
+ mysql_app_db: makeup
+ mysql_app_user: uchenna
+ mysql_app_pass: 1234567
+
+# Web Server Setup
+ http_host: "{{ 192.168.56.4 }}"
+ remote_www_root: /var/www
+ app_root_dir: makeup
+ document_root: "{{ remote_www_root }}/{{ app_root_dir }}/public"
+
+# Laravel Env Variables
+ app_name: makeup
+ app_env: dev
+ app_debug: true
+ app_url: "http://{{ http_host }}"
+ db_host: localhost
+ db_port: 3306
+ db_database: "{{ mysql_app_db }}"
+ db_user: "{{ mysql_app_user }}"
+ db_pass: "{{ mysql_app_pass }}"

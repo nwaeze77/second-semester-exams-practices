@@ -1,0 +1,7 @@
+---
+# vars file for Mysql
+ mysql_root_password: root
+ mysql_app_db: laravel
+ mysql_app_user: uchenna
+ mysql_app_pass: 1234567
+

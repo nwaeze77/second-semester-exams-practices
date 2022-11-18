@@ -1,0 +1,12 @@
+---
+# vars file for Apache2
+
+app_user: "uchenna"
+http_host: "192.168.56.6"
+http_conf: "laravel"
+http_port: "80"
+disable_default: true
+document_root: /var/www/
+
+
+

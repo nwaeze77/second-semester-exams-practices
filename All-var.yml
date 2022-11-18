@@ -1,0 +1,26 @@
+---
+# Initial Server Setup
+ remote_user: ubuntu
+
+# MySQL Setup
+ mysql_root_password: MYSQL_ROOT_PASSWORD
+ mysql_app_db: mini-project
+ mysql_app_user: uchenna
+ mysql_app_pass: 1234567
+
+# Web Server Setup
+ http_host: "{{ uchennaaltschool.me }}"
+ remote_www_root: /var/www
+ app_root_dir: mini-project
+ document_root: "/var/www/mini-project/public"
+
+# Laravel Env Variables
+ app_name: mini-project
+ app_env: dev
+ app_debug: true
+ app_url: "http://{{ http_host }}"
+ db_host: localhost
+ db_port: 3306
+ db_database: "{{ mysql_app_db }}"
+ db_user: "{{ mysql_app_user }}"
+ db_pass: "{{ mysql_app_pass }}"

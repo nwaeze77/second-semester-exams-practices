@@ -1,0 +1,69 @@
+---
+# Initial Server Setup
+ remote_user: uchennaAPP_NAME={{ app_name }}
+APP_ENV={{ app_env }}
+APP_KEY=
+APP_DEBUG={{ app_debug }}
+APP_URL={{ app_url }}
+
+LOG_CHANNEL=stack
+
+DB_CONNECTION=mysql
+DB_HOST={{ db_host }}
+DB_PORT={{ db_port }}
+DB_DATABASE={{ db_database }}
+DB_USERNAME={{ db_user }}
+DB_PASSWORD={{ db_pass }}
+
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=mt1
+
+MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+
+# MySQL Setup
+ mysql_root_password: MYSQL_ROOT_PASSWORD
+ mysql_app_db: mini-project
+ mysql_app_user: uchenna
+ mysql_app_pass: 1234567
+
+# Web Server Setup
+ http_host: "{{ ansible_facts.eth0.ipv4.address }}"
+ remote_www_root: /var/www
+ app_root_dir: mini-project
+ document_root: "{{ remote_www_root }}/{{ app_root_dir }}/public"
+
+# Laravel Env Variables
+ app_name: mini-project
+ app_env: dev
+ app_debug: true
+ app_url: "http://{{ http_host }}"
+ db_host: localhost
+ db_port: 3306
+ db_database: "{{ mysql_app_db }}"
+ db_user: "{{ mysql_app_user }}"
+ db_pass: "{{ mysql_app_pass }}"
